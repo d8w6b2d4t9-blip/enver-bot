@@ -1,0 +1,34 @@
+services:
+  # 백엔드 서버 설정
+  - type: web
+    name: enver-bot-server
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: OPENAI_API_KEY
+        sync: false # 사용자가 Render 대시보드에서 직접 입력하도록 설정
+      - key: CLIENT_URL
+        fromService:
+          name: enver-bot-client
+          type: static_site
+          property: url
+
+  # 프론트엔드 클라이언트 설정
+  - type: static_site
+    name: enver-bot-client
+    env: static
+    plan: free
+    rootDir: client
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: enver-bot-server
+          type: web
+          property: url
