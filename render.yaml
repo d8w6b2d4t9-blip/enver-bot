@@ -19,7 +19,7 @@ services:
           property: url
 
   # 프론트엔드 클라이언트 설정
-  - type: static_site
+  - type: static
     name: enver-bot-client
     env: static
     plan: free
